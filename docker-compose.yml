@@ -1,0 +1,40 @@
+services:
+  users:
+    build: ./users
+    depends_on:
+      - db
+    ports:
+      - 4000:4000
+  appeal-request:
+    build: ./appealRequest
+    depends_on:
+      - db
+    ports:
+      - 4001:4001
+  notifications:
+    build: ./notifications
+    depends_on:
+      - db
+    ports:
+      - 4002:4002
+  change-request:
+    build: ./changeRequest
+    depends_on:
+      - db
+    ports:
+      - 4003:4003
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=letoto
+      - PGDATA=/data/postgres
+      - POSTGRES_HOST=users
+
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
