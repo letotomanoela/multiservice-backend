@@ -104,6 +104,12 @@ app.put("api/changeRequest/apply/:id", async (c) => {
     where: (informations, { eq }) => eq(informations.changeRequestId, id),
   });
 
+  if (!data) {
+    return c.json({
+      message: "No data found",
+    });
+  }
+
   try {
     const getBeneficiary = await fetch(
       `http://users:4000/api/beneficiary/${data?.beneficiaryId}`
@@ -135,10 +141,10 @@ app.put("api/changeRequest/apply/:id", async (c) => {
     const notificationText = `
       Beneficiary ${beneficiary?.fullname} that has the id ${data?.beneficiaryId} has been updated. \n
       The change request has been applied.
-      Before the name was ${beneficiary?.fullname} and now it is ${data?.beneficiaryName}. \n
-      Before the email was ${beneficiary?.email} and now it is ${data?.beneficiaryEmail}. \n
-      Before the phone was ${beneficiary?.phone} and now it is ${data?.beneficiaryPhone}. \n
-      Before the address was ${beneficiary?.address} and now it is ${data?.beneficiaryAddress}. \n
+      Before the name was ${beneficiary?.user.fullname} and now it is ${data?.beneficiaryName}. \n
+      Before the email was ${beneficiary?.user.email} and now it is ${data?.beneficiaryEmail}. \n
+      Before the phone was ${beneficiary?.user.phone} and now it is ${data?.beneficiaryPhone}. \n
+      Before the address was ${beneficiary?.user.address} and now it is ${data?.beneficiaryAddress}. \n
     `;
 
     await fetch("http://notifications:4002/api/notification", {
