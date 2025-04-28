@@ -50,14 +50,14 @@ app.get("/api/appealRequest/:id", async (c) => {
   let fullData = {};
 
   try {
-    const getEmployes = await fetch(
-      `http://users:4000/api/employe/${data?.employesId}`
-    );
-    const getHrAdvisor = await fetch(
-      `http://users:4000/api/hrAdvisor/${data?.hrAdvisorId}`
-    );
-    const employes = await getEmployes.json();
-    const hrAdvisor = await getHrAdvisor.json();
+    const getEmployes = data?.employesId
+      ? await fetch(`http://users:4000/api/employe/${data?.employesId}`)
+      : null;
+    const getHrAdvisor = data?.hrAdvisorId
+      ? await fetch(`http://users:4000/api/hrAdvisor/${data?.hrAdvisorId}`)
+      : null;
+    const employes = await getEmployes?.json();
+    const hrAdvisor = await getHrAdvisor?.json();
     fullData = {
       ...data,
       employes,
