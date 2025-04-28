@@ -23,6 +23,15 @@ services:
       - db
     ports:
       - 4003:4003
+  api:
+    build: ./api
+    depends_on:
+      - users
+      - appeal-request
+      - notifications
+      - change-request
+    ports:
+      - 5000:5000
   db:
     image: postgres
     restart: always
