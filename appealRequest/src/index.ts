@@ -75,18 +75,20 @@ app.get("/api/appealRequest/:id", async (c) => {
 
 app.post("/api/appealRequest", async (c) => {
   const data = await c.req.json();
-  const newData = await db.insert(appealRequest).values(data);
-  // Verify employesId and hrAdvisorId
-  const getEmployes = await fetch(
-    `http://localhost:4000/api/employes/${data.employesId}`
-  );
+  try {
+    // Verify employesId and hrAdvisorId
+    const getEmployes = await fetch(
+      `http://localhost:4000/api/employes/${data.employesId}`
+    );
 
-  const employes = await getEmployes.json();
-  if (!employes) {
-    return c.json({ error: "Employes not found" }, 404);
+    const employes = await getEmployes.json();
+    if (!employes) {
+      return c.json({ error: "Employes not found" }, 404);
+    }
+    const newData = await db.insert(appealRequest).values(data);
+  } catch (error) {
+    return c.json({ error: "Could not verify the employe" }, 500);
   }
-
-  return c.json(newData);
 });
 
 app.put("/api/appealReaquest/approve/:id", async (c) => {

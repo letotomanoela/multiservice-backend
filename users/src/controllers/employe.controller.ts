@@ -69,7 +69,5 @@ export const getOne: RequestHandler = async (req, res, next) => {
     },
   });
 
-  res.status(200).json({
-    user: findUser,
-  });
+  res.status(200).json(findUser);
 };
