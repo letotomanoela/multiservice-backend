@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import db from "./db";
-import { informations } from "./db/schema";
+import { changeRequest, informations } from "./db/schema";
 
 const app = new Hono();
 
@@ -93,7 +93,6 @@ app.post("api/changeRequest/informations", async (c) => {
 });
 
 app.put("api/changeRequest/apply/:id", async (c) => {
-  const body = await c.req.json();
   const id = c.req.param("id");
   const data = await db.query.informations.findFirst({
     where: (informations, { eq }) => eq(informations.changeRequestId, id),
@@ -126,6 +125,27 @@ app.put("api/changeRequest/apply/:id", async (c) => {
       }
     );
     const beneficiaryUpdated = await updateBeneficiary.json();
+
+    const notificationText = `
+      Beneficiary ${beneficiary?.fullname} that has the id ${data?.beneficiaryId} has been updated. \n
+      The change request has been applied.
+      Before the name was ${beneficiary?.fullname} and now it is ${data?.beneficiaryName}. \n
+      Before the email was ${beneficiary?.email} and now it is ${data?.beneficiaryEmail}. \n
+      Before the phone was ${beneficiary?.phone} and now it is ${data?.beneficiaryPhone}. \n
+      Before the address was ${beneficiary?.address} and now it is ${data?.beneficiaryAddress}. \n
+    `;
+
+    await fetch("http://localhost:4002/api/notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        notifContent: notificationText,
+        changeRequestId: data?.changeRequestId,
+      }),
+    });
+
     return c.json(beneficiaryUpdated);
   } catch (error) {
     return c.json({
