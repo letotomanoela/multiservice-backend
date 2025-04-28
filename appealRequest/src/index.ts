@@ -1,3 +1,4 @@
+import { changeRequest } from "./../../changeRequest/src/db/schema";
 import { Hono } from "hono";
 import db from "./db";
 import { appealRequest } from "./db/schema";
@@ -119,7 +120,31 @@ app.put("/api/appealReaquest/approve/:id", async (c) => {
       requestStatus: "approved",
       hrAdvisorId: body.hrAdvisorId,
     })
-    .where(eq(appealRequest.requestId, id));
+    .where(eq(appealRequest.requestId, id))
+    .returning();
+
+  try {
+    const addChangeRequest = await fetch(
+      "http://change-request:4003/api/changeRequest",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          changeRequestId: body.changeRequestId,
+          hrAdvisorId: body.hrAdvisorId,
+        }),
+      }
+    );
+    const addChangeRequestData = await addChangeRequest.json();
+
+    return c.json({
+      message: "Request approved successfully",
+      data,
+      changeRequest: addChangeRequestData,
+    });
+  } catch (error) {}
   return c.json(data);
 });
 

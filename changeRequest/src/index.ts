@@ -15,7 +15,7 @@ app.get("/api/changeRequest", async (c) => {
 
   try {
     // get the hrAdvisors
-    const getHrAdvisor = await fetch("http://localhost:4000/api/hrAdvisor");
+    const getHrAdvisor = await fetch("http://users:4000/api/hrAdvisor");
     const hrAdvisor = await getHrAdvisor.json();
 
     data.map((item) => {
@@ -39,6 +39,12 @@ app.get("/api/changeRequest", async (c) => {
   return c.json(fullData);
 });
 
+app.post("/api/changeRequest", async (c) => {
+  const body = await c.req.json();
+  const data = await db.insert(changeRequest).values(body).returning();
+  return c.json(data);
+});
+
 app.get("/api/changeRequest/:id", async (c) => {
   const id = c.req.param("id");
   const data = await db.query.changeRequest.findFirst({
@@ -53,7 +59,7 @@ app.get("/api/changeRequest/:id", async (c) => {
   try {
     // get the hrAdvisors
     const getHrAdvisor = await fetch(
-      `http://localhost:4000/api/hrAdvisor/${data?.hrAdvisorId}`
+      `http://users:4000/api/hrAdvisor/${data?.hrAdvisorId}`
     );
     const hrAdvisor = await getHrAdvisor.json();
     fullData = {
@@ -75,7 +81,7 @@ app.post("api/changeRequest/informations", async (c) => {
   /** Verify if beneficiaryId exists */
   try {
     const getBeneficiary = await fetch(
-      `http://localhost:4000/api/beneficiary/${body.beneficiaryId}`
+      `http://users:4000/api/beneficiary/${body.beneficiaryId}`
     );
     const beneficiary = await getBeneficiary.json();
     if (!beneficiary) {
@@ -100,7 +106,7 @@ app.put("api/changeRequest/apply/:id", async (c) => {
 
   try {
     const getBeneficiary = await fetch(
-      `http://localhost:4000/api/beneficiary/${data?.beneficiaryId}`
+      `http://users:4000/api/beneficiary/${data?.beneficiaryId}`
     );
     const beneficiary = await getBeneficiary.json();
     if (!beneficiary) {
@@ -110,7 +116,7 @@ app.put("api/changeRequest/apply/:id", async (c) => {
     }
 
     const updateBeneficiary = await fetch(
-      `http://localhost:4000/api/beneficiary/${data?.beneficiaryId}`,
+      `http://users:4000/api/beneficiary/${data?.beneficiaryId}`,
       {
         method: "PUT",
         headers: {
@@ -135,7 +141,7 @@ app.put("api/changeRequest/apply/:id", async (c) => {
       Before the address was ${beneficiary?.address} and now it is ${data?.beneficiaryAddress}. \n
     `;
 
-    await fetch("http://localhost:4002/api/notification", {
+    await fetch("http://notifications:4002/api/notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
