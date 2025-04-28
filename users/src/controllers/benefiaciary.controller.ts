@@ -58,3 +58,17 @@ export const update: RequestHandler = async (req, res, next) => {
     message: "User updated successfully",
   });
 };
+
+export const getOne: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+  const findUser = await db.query.beneficiary.findFirst({
+    where: (beneficiary, { eq }) => eq(beneficiary.beneficiaryId, id),
+    with: {
+      user: true,
+    },
+  });
+
+  res.status(200).json({
+    user: findUser,
+  });
+};
