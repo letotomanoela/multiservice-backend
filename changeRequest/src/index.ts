@@ -92,4 +92,46 @@ app.post("api/changeRequest/informations", async (c) => {
   return c.json(data);
 });
 
+app.put("api/changeRequest/apply/:id", async (c) => {
+  const body = await c.req.json();
+  const id = c.req.param("id");
+  const data = await db.query.informations.findFirst({
+    where: (informations, { eq }) => eq(informations.changeRequestId, id),
+  });
+
+  try {
+    const getBeneficiary = await fetch(
+      `http://localhost:4000/api/beneficiary/${data?.beneficiaryId}`
+    );
+    const beneficiary = await getBeneficiary.json();
+    if (!beneficiary) {
+      return c.json({
+        message: "Beneficiary not found",
+      });
+    }
+
+    const updateBeneficiary = await fetch(
+      `http://localhost:4000/api/beneficiary/${data?.beneficiaryId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullname: data?.beneficiaryName,
+          email: data?.beneficiaryEmail,
+          phone: data?.beneficiaryPhone,
+          address: data?.beneficiaryAddress,
+        }),
+      }
+    );
+    const beneficiaryUpdated = await updateBeneficiary.json();
+    return c.json(beneficiaryUpdated);
+  } catch (error) {
+    return c.json({
+      message: "Could not fetch beneficiary",
+    });
+  }
+});
+
 export default app;
