@@ -44,7 +44,7 @@ const beneficiaryCreateRoute = createRoute({
 
 const beneficiaryDeleteRoute = createRoute({
   method: "delete",
-  path: "/:id",
+  path: "/beneficiary/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -61,7 +61,7 @@ const beneficiaryDeleteRoute = createRoute({
 
 const beneficiaryUpdateRoute = createRoute({
   method: "put",
-  path: "/:id",
+  path: "/beneficiary/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -90,7 +90,7 @@ const beneficiaryUpdateRoute = createRoute({
 
 const beneficiaryGetOneRoute = createRoute({
   method: "get",
-  path: "/:id",
+  path: "/beneficiary/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -108,7 +108,7 @@ const beneficiaryGetOneRoute = createRoute({
 // Employee routes
 const employeRoutes = createRoute({
   method: "get",
-  path: "/",
+  path: "/employe",
   responses: {
     200: {
       description: "GET ALL EMPLOYEES",
@@ -120,7 +120,7 @@ const employeRoutes = createRoute({
 
 const employeCreateRoute = createRoute({
   method: "post",
-  path: "/",
+  path: "/employe",
   request: {
     body: {
       content: {
@@ -146,7 +146,7 @@ const employeCreateRoute = createRoute({
 
 const employeDeleteRoute = createRoute({
   method: "delete",
-  path: "/:id",
+  path: "/employe/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -163,7 +163,7 @@ const employeDeleteRoute = createRoute({
 
 const employeUpdateRoute = createRoute({
   method: "put",
-  path: "/:id",
+  path: "/employe/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -192,7 +192,7 @@ const employeUpdateRoute = createRoute({
 
 const employeGetOneRoute = createRoute({
   method: "get",
-  path: "/:id",
+  path: "/employe/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -210,7 +210,7 @@ const employeGetOneRoute = createRoute({
 // HR Advisor routes
 const hrAdvisorRoutes = createRoute({
   method: "get",
-  path: "/",
+  path: "/hrAdvisor",
   responses: {
     200: {
       description: "GET ALL HR ADVISORS",
@@ -222,7 +222,7 @@ const hrAdvisorRoutes = createRoute({
 
 const hrAdvisorCreateRoute = createRoute({
   method: "post",
-  path: "/",
+  path: "/hrAdvisor",
   request: {
     body: {
       content: {
@@ -248,7 +248,7 @@ const hrAdvisorCreateRoute = createRoute({
 
 const hrAdvisorDeleteRoute = createRoute({
   method: "delete",
-  path: "/:id",
+  path: "/hrAdvisor/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -265,7 +265,7 @@ const hrAdvisorDeleteRoute = createRoute({
 
 const hrAdvisorUpdateRoute = createRoute({
   method: "put",
-  path: "/:id",
+  path: "/hrAdvisor/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
@@ -294,7 +294,7 @@ const hrAdvisorUpdateRoute = createRoute({
 
 const hrAdvisorGetOneRoute = createRoute({
   method: "get",
-  path: "/:id",
+  path: "/hrAdvisor/:id",
   request: {
     params: z.object({
       id: z.string().uuid(),
