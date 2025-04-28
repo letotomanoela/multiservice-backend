@@ -41,14 +41,14 @@ const notificationCreateRoute = createRoute({
 });
 
 app.openapi(notificationRoutes, async (c) => {
-  const res = await fetch("http://notification:4002/api/notification");
+  const res = await fetch("http://notifications:4002/api/notification");
   const data = await res.json();
   return c.json(data);
 });
 
 app.openapi(notificationCreateRoute, async (c) => {
   const json = await c.req.json();
-  const res = await fetch("http://notification:4002/api/notification", {
+  const res = await fetch("http://notifications:4002/api/notification", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
