@@ -16,8 +16,9 @@ app.get("/api/appealRequest", async (c) => {
 
     data.map((item) => {
       const employesData = employes.find(
-        (employes: any) => employes.employesId === item.employesId
+        (employes: any) => employes.employeId === item.employesId
       );
+
       const hrAdvisorData = hrAdvisor.find(
         (hrAdvisor: any) => hrAdvisor.hrAdvisorId === item.hrAdvisorId
       );
