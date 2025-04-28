@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import db from "./db";
+import { informations } from "./db/schema";
 
 const app = new Hono();
 
@@ -67,6 +68,28 @@ app.get("/api/changeRequest/:id", async (c) => {
   }
 
   return c.json(fullData);
+});
+
+app.post("api/changeRequest/informations", async (c) => {
+  const body = await c.req.json();
+  /** Verify if beneficiaryId exists */
+  try {
+    const getBeneficiary = await fetch(
+      `http://localhost:4000/api/beneficiary/${body.beneficiaryId}`
+    );
+    const beneficiary = await getBeneficiary.json();
+    if (!beneficiary) {
+      return c.json({
+        message: "Beneficiary not found",
+      });
+    }
+  } catch (error) {
+    return c.json({
+      message: "Could not fetch beneficiary",
+    });
+  }
+  const data = await db.insert(informations).values(body).returning();
+  return c.json(data);
 });
 
 export default app;
